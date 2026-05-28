@@ -1,6 +1,8 @@
-// ◊·κ FALL-PALETTE · v1.0 · 2026-05-28
+// ◊·κ FALL-PALETTE · v2.0 · 2026-05-28
 // Ctrl+K command palette · drop-in plugin · zero dependencies
 // Auto-discovers nav buttons + actions in any Fall* sovereign tool.
+// v2 · the green spoke · subtle ◊ glyph next to active matches · group counts in footer
+//      hot-loaded into running tools via fall-hot without refresh
 //
 // USAGE (CDN):
 //   <script src="https://sjgant80-hub.github.io/fall-palette/fall-palette.js" defer></script>
@@ -25,7 +27,13 @@
 // MIT licence · part of the Fall* sovereign tool estate
 
 (function fallPalette(){
-  if (window.fallPalette && window.fallPalette._v >= 1) return;
+  if (window.fallPalette && window.fallPalette._v >= 2) return;
+  // If v1 already loaded, clean it up first so we don't double-bind hotkeys
+  if (window.fallPalette && window.fallPalette._v === 1) {
+    // v1 doesn't expose a cleanup hook — best we can do is mark the old overlay for removal
+    var oldOverlay = document.getElementById('fall-palette-overlay');
+    if (oldOverlay) try { oldOverlay.remove(); } catch(_){}
+  }
 
   function discover() {
     var commands = [];
@@ -160,12 +168,17 @@
     listEl.innerHTML = filtered.map(function(it, i){
       var sel = i === cursor;
       var bg = sel ? 'background:rgba(212,175,55,0.12);border-left:3px solid #d4af37' : 'border-left:3px solid transparent';
+      var mark = sel ? '<span style="color:#d4af37;margin-right:4px">◊</span>' : '';
       return '<div data-i="' + i + '" class="fall-palette-row" style="padding:8px 12px;cursor:pointer;border-radius:5px;display:flex;justify-content:space-between;gap:12px;color:#dbe1ea;font-size:13px;' + bg + '">' +
-        '<span>' + escHtml(it.label) + '</span>' +
+        '<span>' + mark + escHtml(it.label) + '</span>' +
         '<span style="font-family:DM Mono,monospace;color:#5a5a5a;font-size:10px;text-transform:uppercase;letter-spacing:0.08em">' + escHtml(it.group || '') + '</span>' +
       '</div>';
     }).join('');
-    document.getElementById('fall-palette-count').textContent = filtered.length + ' / ' + items.length;
+    // v2 · group counts in the count chip
+    var groupCounts = {};
+    filtered.forEach(function(it){ var g = it.group || 'other'; groupCounts[g] = (groupCounts[g] || 0) + 1; });
+    var groupTxt = Object.keys(groupCounts).slice(0,3).map(function(g){ return groupCounts[g] + ' ' + g.toLowerCase(); }).join(' · ');
+    document.getElementById('fall-palette-count').textContent = filtered.length + ' / ' + items.length + (groupTxt ? ' · ' + groupTxt : '');
     listEl.querySelectorAll('.fall-palette-row').forEach(function(row){
       row.addEventListener('click', function(){ var i = +row.getAttribute('data-i'); cursor = i; fire(); });
       row.addEventListener('mouseenter', function(){ var i = +row.getAttribute('data-i'); if (i !== cursor) { cursor = i; render(); } });
@@ -201,10 +214,11 @@
     }
   });
 
-  // Public API
+  // Public API · preserve user commands if upgrading from v1
+  var preservedCommands = (window.fallPalette && window.fallPalette._userCommands) ? window.fallPalette._userCommands : [];
   window.fallPalette = {
-    _v: 1,
-    _userCommands: [],
+    _v: 2,
+    _userCommands: preservedCommands,
     open: open,
     close: close,
     register: function(cmd) {
@@ -214,5 +228,5 @@
     discover: discover
   };
 
-  try { console.log('%cfall-palette', 'color:#d4af37;font-weight:bold', 'v1 · Ctrl+K to open · window.fallPalette.register({label, run})'); } catch(_){}
+  try { console.log('%c◊·κ fall-palette', 'color:#d4af37;font-weight:bold', 'v2 · ◊ glyph on selected · group counts in footer · Ctrl+K'); } catch(_){}
 })();
