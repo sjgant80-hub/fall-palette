@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>fall-palette · Ctrl+K command palette · sovereign drop-in</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06070b; --surface: #0c0e14; --surface-2: #11141d; --border: #1f2330;
+  --ink: #b8bfca; --dim: #6b7280; --bright: #f0f3f7;
+  --gold: #d4a853; --accent: #c8371a; --ok: #4ecba0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Syne', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  line-height: 1.55;
+}
+code, pre, .mono { font-family: 'DM Mono', ui-monospace, monospace; }
+
+header {
+  padding: 60px 24px 40px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(212,168,83,0.04), transparent);
+}
+header .glyph { font-size: 32px; color: var(--gold); display: block; margin-bottom: 12px; }
+header h1 { font-size: 38px; font-weight: 800; color: var(--bright); letter-spacing: -0.02em; margin-bottom: 10px; }
+header p { color: var(--dim); font-size: 14px; font-family: 'DM Mono', monospace; letter-spacing: 0.05em; }
+
+main { max-width: 880px; margin: 0 auto; padding: 40px 24px 80px; }
+
+.demo-banner {
+  background: var(--surface);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  padding: 24px 28px;
+  margin-bottom: 36px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.demo-banner .kbd {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--gold);
+  border-radius: 5px;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--gold);
+}
+.demo-banner .text { color: var(--bright); font-size: 16px; flex: 1; min-width: 220px; }
+.demo-banner button {
+  background: var(--gold);
+  color: #000;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+section { margin-bottom: 40px; }
+section h2 {
+  font-size: 11px;
+  color: var(--dim);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 14px;
+  font-weight: 700;
+}
+
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  overflow-x: auto;
+  font-size: 12px;
+  color: var(--ink);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+code.inline {
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.92em;
+  color: var(--gold);
+}
+
+ul { padding-left: 22px; margin-bottom: 16px; }
+li { margin-bottom: 6px; }
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 32px;
+}
+.feature {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+.feature .icon { color: var(--gold); font-family: 'DM Mono', monospace; font-size: 18px; margin-bottom: 6px; }
+.feature h3 { font-size: 14px; color: var(--bright); margin-bottom: 4px; font-weight: 700; }
+.feature p { font-size: 12px; color: var(--dim); }
+
+.try-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+.try-actions button {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--bright);
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+}
+.try-actions button:hover { border-color: var(--gold); }
+
+footer {
+  padding: 24px;
+  text-align: center;
+  color: var(--dim);
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  border-top: 1px solid var(--border);
+  letter-spacing: 0.06em;
+}
+footer a { color: var(--gold); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="glyph">◊</span>
+  <h1>fall-palette</h1>
+  <p>Ctrl+K command palette · drop-in plugin · zero dependencies</p>
+</header>
+
+<main>
+
+  <div class="demo-banner">
+    <div class="text">This page is a live demo. Press <span class="kbd">Ctrl K</span> <span style="color:var(--dim)">(or ⌘K on Mac)</span> right now.</div>
+    <button onclick="window.fallPalette.open()">or click here to open</button>
+  </div>
+
+  <section>
+    <h2>What it does</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="icon">◊</div>
+        <h3>Auto-discovers</h3>
+        <p>Every nav button and clickable action in the host page is found and listed automatically. No config needed.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">/</div>
+        <h3>Fuzzy search</h3>
+        <p>Subsequence match · type any partial like <code class="inline">opfq</code> to hit "Open RFQs". Sorted by relevance.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">⌨</div>
+        <h3>Keyboard native</h3>
+        <p>Ctrl+K opens · ↑↓ navigate · Enter to fire · Esc to close. Tab cycles too. Mouse works if you want.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">+</div>
+        <h3>Programmable</h3>
+        <p>Register custom commands from your tool with <code class="inline">window.fallPalette.register({label, run})</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Install · one line</h2>
+    <pre>&lt;script src="https://sjgant80-hub.github.io/fall-palette/fall-palette.js" defer&gt;&lt;/script&gt;</pre>
+    <p style="font-size:13px;color:var(--ink)">Drop that anywhere before <code class="inline">&lt;/body&gt;</code>. Ctrl+K works on next page load. No build step, no npm, no framework.</p>
+  </section>
+
+  <section>
+    <h2>Register custom commands</h2>
+    <pre>window.fallPalette.register({
+  id:       'sweep:135',                       <span style="color:var(--dim)">// unique key</span>
+  label:    'Sweep BTC to primed wallet',      <span style="color:var(--dim)">// shown in palette</span>
+  group:    'Sweep',                           <span style="color:var(--dim)">// category column</span>
+  keywords: 'broadcast tx send bitcoin',       <span style="color:var(--dim)">// extra search match</span>
+  run:      () =&gt; window.fastSweep(privKey)    <span style="color:var(--dim)">// fired on Enter</span>
+});</pre>
+  </section>
+
+  <section>
+    <h2>Demo · try these custom commands</h2>
+    <p style="font-size:13px;color:var(--ink);margin-bottom:14px">Three custom commands are registered on this page. Open the palette and search.</p>
+    <div class="try-actions">
+      <button onclick="window.fallPalette.open()">Ctrl+K · open palette</button>
+      <button onclick="window.fallPalette.register({id:'demo:rand',label:'Generate random number',group:'Demo',keywords:'number rand',run:()=>alert('Random: '+Math.random())});alert('Registered · open palette and search')">+ register new command</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Estate-aware</h2>
+    <p style="font-size:13px;color:var(--ink);margin-bottom:10px">Detects other Fall* shims if loaded and surfaces their actions:</p>
+    <ul style="font-family:'DM Mono',monospace;font-size:12px;color:var(--ink)">
+      <li><code class="inline">window.bloom</code> → "Decompose text (bloom signature)"</li>
+      <li><code class="inline">window.apexSync</code> → Export · Import · Configure sync endpoint</li>
+      <li><code class="inline">window.kcc</code> → respects <code class="inline">.dev-mode</code> body class</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>API</h2>
+    <pre>window.fallPalette.open()             <span style="color:var(--dim)">// open programmatically</span>
+window.fallPalette.close()
+window.fallPalette.register(cmd)      <span style="color:var(--dim)">// {id?, label, group?, keywords?, run}</span>
+window.fallPalette.discover()         <span style="color:var(--dim)">// return current command list</span></pre>
+  </section>
+
+</main>
+
+<footer>
+  ◊·κ=1 · fall-palette v1.0 · MIT · part of the Fall sovereign tool estate ·
+  <a href="https://github.com/sjgant80-hub/fall-palette">source</a> ·
+  <a href="https://github.com/sjgant80-hub">estate</a>
+</footer>
+
+<script>
+  // Register a couple of demo commands so the palette has something interesting in it
+  window._fallPaletteDemoBoot = function() {
+    if (!window.fallPalette) { setTimeout(window._fallPaletteDemoBoot, 100); return; }
+    window.fallPalette.register({ id:'demo:hello', label:'Say hello',      group:'Demo', keywords:'wave greet', run: function(){ alert('hello from fall-palette ◊'); } });
+    window.fallPalette.register({ id:'demo:time',  label:"What time is it?", group:'Demo', keywords:'clock now', run: function(){ alert('It is ' + new Date().toLocaleTimeString()); } });
+    window.fallPalette.register({ id:'demo:open-source', label:'Open source on GitHub', group:'Links', keywords:'repo code', run: function(){ window.open('https://github.com/sjgant80-hub/fall-palette', '_blank'); } });
+  };
+  window._fallPaletteDemoBoot();
+</script>
+
+<script src="./fall-palette.js" defer></script>
+
+</body>
+</html>
