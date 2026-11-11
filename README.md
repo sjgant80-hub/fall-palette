@@ -96,4 +96,4 @@ Drop-in compatible with any HTML page that has `<button>` elements. No requireme
 
 ## Licence
 
-MIT. Part of the Fall sovereign tool estate. ◊·κ=1
+MIT. Part of the Fall sovereign tool estate. 
